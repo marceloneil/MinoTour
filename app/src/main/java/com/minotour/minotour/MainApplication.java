@@ -7,6 +7,7 @@ import com.flybits.core.api.FlybitsOptions;
 
 /**
  * Created by Marcel O'Neil on 09/04/16.
+ * Front View
  */
 public class MainApplication extends Application {
 
