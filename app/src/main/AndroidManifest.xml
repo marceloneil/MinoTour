@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.flybits.apikey" android:value="" />
+        <meta-data android:name="com.flybits.apikey" android:value="1" />
     </application>
 
 </manifest>
