@@ -2,8 +2,16 @@ package com.minotour.minotour;
 
 import android.app.Application;
 
+
+//flybits api
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.FlybitsOptions;
+
+import java.util.List;
+
+import se.walkercrou.places.GooglePlaces;
+import se.walkercrou.places.Place;
+
 
 /**
  * Created by Marcel O'Neil on 09/04/16.
@@ -21,5 +29,15 @@ public class MainApplication extends Application {
 
         //Initialize the FlybitsOptions
         Flybits.include(this).initialize(builder);
+
+
+        GooglePlaces client = new GooglePlaces("");
+        List<Place> places = client.getNearbyPlaces(200, 500, 2000, GooglePlaces.MAXIMUM_RESULTS);
+        for(Place p: places){
+
+            System.out.println(p);
+        }
+
+
     }
 }
