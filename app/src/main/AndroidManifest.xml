@@ -9,6 +9,9 @@
     <!-- Needed for Flybits SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Needed for Google API -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
