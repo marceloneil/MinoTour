@@ -32,7 +32,7 @@ public class MainApplication extends Application {
 
 
         GooglePlaces client = new GooglePlaces(BuildConfig.GoogleApiKey);
-        List<Place> places = client.getNearbyPlaces(200, 500, 2000, GooglePlaces.MAXIMUM_RESULTS);
+        List<Place> places = client.getNearbyPlaces(200, 500, 200, GooglePlaces.MAXIMUM_RESULTS);
         for(Place p: places){
             System.out.println(p);
         }
