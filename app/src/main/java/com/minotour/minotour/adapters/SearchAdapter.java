@@ -1,13 +1,16 @@
 package com.minotour.minotour.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.minotour.minotour.R;
 import com.minotour.minotour.models.PlaceResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,6 +32,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         public View root;
         public TextView txtTitle, txtDist, txtAddr;
+        public ImageView locationImage;
 
         public ViewHolder(View v) {
             super(v);
@@ -37,14 +41,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             txtTitle = (TextView) v.findViewById(R.id.item_search_txtTitle);
             txtDist = (TextView) v.findViewById(R.id.item_search_txtDistance);
             txtAddr = (TextView) v.findViewById(R.id.item_search_txtAddress);
+            locationImage = (ImageView) v.findViewById(R.id.locationImage);
         }
     }
 
     IZoneClick callback;
-
+public Context context;
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchAdapter(ArrayList<PlaceResult> data, IZoneClick callback) {
+    public SearchAdapter(ArrayList<PlaceResult> data, IZoneClick callback, Context contextInner) {
         mDataset = data;
+        context = contextInner;
         this.callback = callback;
     }
 
@@ -73,8 +79,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.txtTitle.setText(item.name);
         holder.txtDist.setText(item.distance.text);
         holder.txtAddr.setText(item.vicinity);
-        //holder.i
 
+        if(item.photoUrl != null) {
+            String stringPhoto = item.photoUrl.replaceAll("\\\\u0026", "&").replaceAll("\\\\u003d", "=");
+
+            Picasso.with(context).load(stringPhoto).into(holder.locationImage);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

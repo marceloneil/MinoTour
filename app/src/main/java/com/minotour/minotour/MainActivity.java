@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLstSearch.setLayoutManager(mLayoutManager);
 
-        mSearchAdapter = new SearchAdapter(mData, this);
+        mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //mData.add(new TestModel());
-        mSearchAdapter = new SearchAdapter(mData, this);
+        mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
     }
 
