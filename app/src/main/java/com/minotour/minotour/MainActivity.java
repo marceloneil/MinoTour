@@ -32,6 +32,7 @@ import com.flybits.core.api.models.Zone;
 import com.flybits.core.api.models.ZoneMoment;
 import com.flybits.core.api.models.v1_5.internal.Result;
 import com.flybits.core.api.utils.http.GetRequest;
+import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.KeyValuePayload;
 import com.minotour.minotour.models.PlaceResult;
