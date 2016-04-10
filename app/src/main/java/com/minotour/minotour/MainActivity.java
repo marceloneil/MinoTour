@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLstSearch.setLayoutManager(mLayoutManager);
 
-        mSearchAdapter = new SearchAdapter(mData, this);
+        mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
 
         toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -190,12 +190,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }*/
                 Log.i("MainActivity", "zonemoments size: " + zoneMoments.size());
-//                authenticateMoment(zoneMoments.get(0));
-//                authenticateMoment(zoneMoments.get(1));
+                authenticateMoment(zoneMoments.get(0));
+                //authenticateMoment(zoneMoments.get(1));
 
-                for(ZoneMoment zm : zoneMoments){
+                /*for(ZoneMoment zm : zoneMoments){
                     authenticateMoment(zm);
-                }
+                }*/
             }
 
             @Override
@@ -447,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         //mData.add(new TestModel());
-        mSearchAdapter = new SearchAdapter(mData, this);
+        mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
     }
 
@@ -509,14 +509,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             zMoments.add(kvp);
 
             for(KeyValuePayload k: zMoments){
-                if(k.localizedKeyValuePairs.en.root.tired != null) {
+                /*if(k.localizedKeyValuePairs.en.root.tired != null) {
                     Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.tired);
                 }
                 if(k.localizedKeyValuePairs.en.root.test != null) {
                     Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.test);
-                }
-
-
+                }*/
+                Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.language);
+                Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.age);
+                Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.tired);
             }
         }
     }
