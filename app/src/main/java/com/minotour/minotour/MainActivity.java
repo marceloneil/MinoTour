@@ -2,6 +2,7 @@ package com.minotour.minotour;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -22,7 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.content.Intent;
 
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.interfaces.IRequestCallback;
@@ -37,7 +37,6 @@ import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.KeyValuePayload;
 import com.minotour.minotour.models.PlaceResult;
-import com.minotour.minotour.models.TestModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, "Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
 
@@ -249,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Load complete
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, "Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
         onItemsLoadComplete();
@@ -324,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,1000,"Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }
