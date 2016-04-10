@@ -454,13 +454,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void OnRetrievedWeather(ArrayList<Weather> results){
        String w = results.get(0).main.toString();
        if(w.equals("Rain") || w.equals("Snow") || w.equals("Extreme") || w.equals("Clouds")){
-           keyword = "Tourism Indoors";
-           refreshItems();
+           keyword = "Museum";
+           //refreshItems();
        } else {
-           keyword = "Tourism";
+           keyword = "Park";
        }
+        refreshItems();
+
+        /*if(zMoments.get(0).localizedKeyValuePairs.en.root.language.equals("english")){
+            keyword = "English"
+        }*/
        Log.i("Weather", w);
     }
+
 
     class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, KeyValuePayload>{
 
