@@ -1,6 +1,7 @@
 package com.minotour.minotour;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.FlybitsOptions;
@@ -9,6 +10,7 @@ import com.flybits.core.api.context.contracts.ContextContract;
 import com.flybits.core.api.context.plugins.AvailablePlugins;
 import com.flybits.core.api.exceptions.FeatureNotSupportedException;
 import com.flybits.core.api.interfaces.IRequestCallback;
+import com.flybits.core.api.interfaces.IRequestLoggedIn;
 import com.flybits.core.api.models.User;
 import com.flybits.core.api.utils.filters.LoginOptions;
 
@@ -39,25 +41,21 @@ public class MainApplication extends Application {
 
         super.onCreate();
 
-        FlybitsOptions builder = new FlybitsOptions.Builder(this)
+        ArrayList<String> listOfLanguages = new ArrayList<>();
+        listOfLanguages.add("en");
+        FlybitsOptions builder = new FlybitsOptions.Builder(MainApplication.this)
                 .setDebug(true)
+                .setLocalization(listOfLanguages)
                 .enableContextUploading(1, ContextContract.Priority.HIGH)//1 -> Time in minutes between uploads
                 .build();
 
         //Initialize the FlybitsOptions
-        Flybits.include(this).initialize(builder);
+        Flybits.include(MainApplication.this).initialize(builder);
+        Log.i("MainApplication", "Loggin in");
 
-        LoginOptions options = new LoginOptions.Builder(this)
-                .loginAnonymously()
-                .setDeviceOSVersion() //Optional
-                .setRememberMeToken() //Optional
-                .build();
-
-        Flybits.include(this).login(options, new IRequestCallback<User>() {
+        Flybits.include(this).isUserLoggedIn(true, new IRequestLoggedIn() {
             @Override
-            public void onSuccess(User data) {
-                //Login Successful
-
+            public void onLoggedIn(User user) {
                 try {
                     Flybits.include(MainApplication.this).activateContext(null, activateContext());
                     System.out.println("Login success");
@@ -68,20 +66,51 @@ public class MainApplication extends Application {
             }
 
             @Override
-            public void onFailed(String reason) {
-                //Unsuccessful Login Make UI Action
-            }
+            public void onNotLoggedIn() {
+                LoginOptions options = new LoginOptions.Builder(getApplicationContext())
+                        .loginAnonymously()
+                        .setDeviceOSVersion() //Optional
+                        .setRememberMeToken() //Optional
+                        .build();
 
-            @Override
-            public void onException(Exception exception) {
-                //Unsuccessful Login Make UI Action
-            }
+                Flybits.include(getApplicationContext()).login(options, new IRequestCallback<User>() {
+                    @Override
+                    public void onSuccess(User data) {
+                        Log.i("MainApplication", "Login successful");
+                        //Login Successful
 
-            @Override
-            public void onCompleted() {
-                //Clean up method
+
+                        try {
+                            Flybits.include(MainApplication.this).activateContext(null, activateContext());
+                            System.out.println("Login success");
+                        } catch (FeatureNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onFailed(String reason) {
+                        //Unsuccessful Login Make UI Action
+                        Log.e("MainApplication", "Failed to login: " + reason);
+                    }
+
+                    @Override
+                    public void onException(Exception exception) {
+                        //Unsuccessful Login Make UI Action
+                        Log.e("MainApplication", "Failed to login: " + exception.toString());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        //Clean up method
+                    }
+                });
             }
         });
+
         //ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(49, -79.383184, 200, GooglePlaces.MAXIMUM_RESULTS));
         //RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
         //get.execute(array);
