@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by marcel on 10/04/16.
  */
-public class Result {
+public class PlaceResult {
     public Geometry geometry;
     public String name;
     public String vicinity;

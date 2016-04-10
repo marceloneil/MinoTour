@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.minotour.minotour.models.DistanceMatrix;
 import com.minotour.minotour.models.Element;
 import com.minotour.minotour.models.Place;
-import com.minotour.minotour.models.Result;
+import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.Row;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by Marcel O'Neil on 09/04/16.
  * Using the google api
  */
-public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<Result>> {
+public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<PlaceResult>> {
 
     private MainActivity mActivity;
 
@@ -65,7 +65,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<R
                 Log.i("link","https://maps.googleapis.com/maps/api/place/nearbysearch/" + nearData);
 
                 StringBuilder loc = new StringBuilder();
-                for (Result result : place.results){
+                for (PlaceResult result : place.results){
                     if(loc.length() != 0) loc.append('|');
                     loc.append(result.geometry.location.lat);
                     loc.append(",");
@@ -96,7 +96,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<R
                 DistanceMatrix matrix = gson.fromJson(distResponse.body().string(), DistanceMatrix.class);
 
                 for(int i=0;i < place.results.size();i++){
-                    Result result = place.results.get(i);
+                    PlaceResult result = place.results.get(i);
                     if(matrix != null && matrix.rows != null && matrix.rows.size() > 0){
                         Row row = matrix.rows.get(0);
 
@@ -112,7 +112,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<R
                 }
 
                 //String resultString = gson.toJson(place.results.get(0));
-                //Log.i("FirstResult", resultString);
+                //Log.i("FirstPlaceResult", resultString);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -121,7 +121,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<R
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Result> results) {
+    protected void onPostExecute(ArrayList<PlaceResult> results) {
         super.onPostExecute(results);
 
         mActivity.OnRetreivedNearbyPlaces(results);

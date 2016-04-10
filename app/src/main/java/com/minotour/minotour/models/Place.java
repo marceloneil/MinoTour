@@ -6,5 +6,5 @@ import java.util.ArrayList;
  * Created by marcel on 10/04/16.
  */
 public class Place {
-    public ArrayList<Result> results;
+    public ArrayList<PlaceResult> results;
 }

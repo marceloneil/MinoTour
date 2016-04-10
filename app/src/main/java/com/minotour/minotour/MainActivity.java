@@ -33,9 +33,9 @@ import com.flybits.core.api.models.Pagination;
 import com.flybits.core.api.models.Zone;
 import com.flybits.core.api.models.ZoneMoment;
 import com.flybits.core.api.models.v1_5.internal.Result;
-import com.flybits.core.api.utils.http.GetRequest
+import com.flybits.core.api.utils.http.GetRequest;
 import com.minotour.minotour.adapters.SearchAdapter;
-import com.minotour.minotour.models.Result;
+import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.TestModel;
 
 import java.io.IOException;
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void OnRetreivedNearbyPlaces(ArrayList<Result> results){
+    public void OnRetreivedNearbyPlaces(ArrayList<PlaceResult> results){
         // TODO: dosomethings
         Gson gson = new Gson();
         String resultString = gson.toJson(results.get(0));
