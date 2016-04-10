@@ -145,6 +145,6 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
     protected void onPostExecute(ArrayList<PlaceResult> results) {
         super.onPostExecute(results);
 
-        mActivity.OnRetreivedNearbyPlaces(results);
+        mActivity.OnRetrievedNearbyPlaces(results);
     }
 }
