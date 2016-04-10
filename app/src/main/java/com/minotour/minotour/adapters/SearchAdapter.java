@@ -28,15 +28,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public View root;
-        public TextView txtTitle, txtDesc, txtDist;
+        public TextView txtTitle, txtDist, txtAddr;
 
         public ViewHolder(View v) {
             super(v);
 
             root = v;
             txtTitle = (TextView) v.findViewById(R.id.item_search_txtTitle);
-            txtDesc = (TextView) v.findViewById(R.id.item_search_txtDesc);
             txtDist = (TextView) v.findViewById(R.id.item_search_txtDistance);
+            txtAddr = (TextView) v.findViewById(R.id.item_search_txtAddress);
         }
     }
 
@@ -71,8 +71,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
         holder.txtTitle.setText(item.name);
-        holder.txtDesc.setText(item.desc);
         holder.txtDist.setText(" - "+item.distance + "km");
+        holder.txtAddr.setText(item.address);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -7,4 +7,5 @@ public class TestModel {
     public String name = "THIS IS A NAME";
     public String desc = "THIS IS A DESC";
     public String distance = "5";
+    public String address = "3342 test drive";
 }

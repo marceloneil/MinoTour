@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    /*public void appendQuery(String title, String description, String Distance) {
+    /*public void appendQuery(String title, String distance, String address) {
 
     }*/
 
