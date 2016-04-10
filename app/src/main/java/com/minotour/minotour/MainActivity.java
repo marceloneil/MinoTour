@@ -192,15 +192,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    public void appendQuery(String title, String description, String Distance) {
+    /*public void appendQuery(String title, String description, String Distance) {
 
-    }
+    }*/
 
 
     @Override
     public void zoneClick(TestModel model) {
 
-        //thjis will update the search queries
+        //this will update the search queries
         mData.clear();
         mData.add(new TestModel());
         mSearchAdapter = new SearchAdapter(mData, this);
