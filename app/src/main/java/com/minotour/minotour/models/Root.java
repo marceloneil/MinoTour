@@ -5,4 +5,5 @@ package com.minotour.minotour.models;
  */
 public class Root {
     public String tired;
+    public String test;
 }

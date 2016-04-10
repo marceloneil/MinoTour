@@ -58,12 +58,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SearchAdapter mSearchAdapter;
     private ArrayList<PlaceResult> mData = new ArrayList<PlaceResult>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<KeyValuePayload> zMoments;
 
     public void onCreate(Bundle savedInstanceState) throws SecurityException, IllegalArgumentException{
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        zMoments = new ArrayList<>();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -175,8 +178,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onSuccess(ArrayList<ZoneMoment> zoneMoments, Pagination pagination) {
                 Log.i("MainActivity", "Successfully received Moments");
-                if(zoneMoments != null && zoneMoments.size() > 0) {
-                    authenticateMoment(zoneMoments.get(0));
+                /*if(zoneMoments != null && zoneMoments.size() > 0) {
+                    for(ZoneMoment zz: zoneMoments) {
+                        authenticateMoment(zz);
+                    }
+                }*/
+                Log.i("MainActivity", "zonemoments size: " + zoneMoments.size());
+//                authenticateMoment(zoneMoments.get(0));
+//                authenticateMoment(zoneMoments.get(1));
+
+                for(ZoneMoment zm : zoneMoments){
+                    authenticateMoment(zm);
                 }
             }
 
@@ -443,27 +455,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.i("MainActivity", "Http Get: " + url);
 
             Result result = null;
-            String resultAsString = null;
-
-//
-//            try {
-//                OkHttpClient client = new OkHttpClient();
-//                Request request = new Request.Builder()
-//                        .url(url)
-//                        .build();
-//
-//                Response response = null;
-//                response = client.newCall(request).execute();
-//                Log.i("MainActivity", "status: " + response.code());
-////                resultAsString = response.body().string();
-//
-//                Log.i("MainActivity", "payload: " + response.body().string());
-//
-//            } catch (Exception e) {
-//                Log.e("MainActivity", e.toString());
-//                e.printStackTrace();
-//            }
-
             KeyValuePayload kvp = null;
 
             try {
@@ -472,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if(result.status >= 200 && result.status < 300) {
                     Log.i("MainActivity", "Http good status code: " + result.status);
-
+                    //Log.i("MainActivity", "RESULT: " + result.response);
                     Gson gson = new Gson();
                     kvp = gson.fromJson(result.response, KeyValuePayload.class);
 
@@ -497,6 +488,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Gson gson = new Gson();
             String str = gson.toJson(kvp);
             Log.i("MainActivity", "Downloaded Moment Data: " + str);
+
+            zMoments.add(kvp);
+
+            for(KeyValuePayload k: zMoments){
+                if(k.localizedKeyValuePairs.en.root.tired != null) {
+                    Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.tired);
+                }
+                if(k.localizedKeyValuePairs.en.root.test != null) {
+                    Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.test);
+                }
+
+
+            }
         }
     }
 }
