@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 100000, keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
 
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Load complete
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 100000, keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
         onItemsLoadComplete();
@@ -341,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,1000,keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,100000,keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }

@@ -58,7 +58,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                         .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData)
                         .build();
                 Response nearResponse = client.newCall(nearRequest).execute();
-
+                Log.i("Link","https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData);
                 String jsonData = nearResponse.body().string();
                 place = gson.fromJson(jsonData, Place.class);
 
