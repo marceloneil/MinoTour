@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<PlaceResult> mData = new ArrayList<PlaceResult>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ArrayList<KeyValuePayload> zMoments;
-    private String keyword = "Tourism";
+    private String keyword = "food";
 
     public void onCreate(Bundle savedInstanceState) throws SecurityException, IllegalArgumentException{
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 100000, keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 3000, keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
 
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Load complete
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 100000, keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 3000, keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
         onItemsLoadComplete();
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,100000,keyword));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,3000,keyword));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }
@@ -481,10 +481,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void OnRetrievedWeather(ArrayList<Weather> results){
        String w = results.get(0).main.toString();
        if(w.equals("Rain") || w.equals("Snow") || w.equals("Extreme") || w.equals("Clouds")){
-           keyword = "Museum";
+           //keyword = "Museum";
            //refreshItems();
        } else {
-           keyword = "Park";
+           //keyword = "Park";
        }
         refreshItems();
 

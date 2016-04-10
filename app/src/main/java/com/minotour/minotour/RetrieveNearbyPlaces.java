@@ -43,6 +43,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                 nearParams.put("location", arrayLists[0].get(0).toString() + "," + arrayLists[0].get(1).toString());
                 nearParams.put("radius", arrayLists[0].get(2).toString());
                 nearParams.put("keyword", arrayLists[0].get(3).toString());
+                //nearParams.put("rankby", "distance");
                 nearParams.put("opennow", "true");
 
                 StringBuilder nearData = new StringBuilder();
