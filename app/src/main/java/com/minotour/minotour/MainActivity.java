@@ -320,7 +320,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent myIntent = new Intent(MainActivity.this, expand_card.class);
         myIntent.putExtra("query_name", model.name);
         myIntent.putExtra("query_address", model.vicinity);
-        myIntent.putExtra("query_rating", Double.toString(model.rating));
+        if(model.rating != null){
+        myIntent.putExtra("query_rating", model.rating.toString());
+        }else {
+            myIntent.putExtra("query_rating", "No Rating");
+        }
         myIntent.putExtra("query_distance", model.distance.text);
 
         Integer price_int = model.price_level;
