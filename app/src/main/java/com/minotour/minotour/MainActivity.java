@@ -3,6 +3,7 @@ package com.minotour.minotour;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,7 +22,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.interfaces.IRequestCallback;
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSearchAdapter = new SearchAdapter(mData, this);
         mLstSearch.setAdapter(mSearchAdapter);
 
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -290,21 +294,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
-
     /*public void appendQuery(String title, String distance, String address) {
 
     }*/
 
-
     @Override
     public void zoneClick(TestModel model) {
+
+
+        Intent myIntent = new Intent(MainActivity.this, expand_card.class);
+        myIntent.putExtra("query_name", model.name);
+        myIntent.putExtra("query_address", model.address);
+        myIntent.putExtra("query_desc", model.desc);
+        myIntent.putExtra("query_distance", model.distance);
+        MainActivity.this.startActivity(myIntent);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //this will update the search queries
         mData.clear();
         mData.add(new TestModel());
         mSearchAdapter = new SearchAdapter(mData, this);
         mLstSearch.setAdapter(mSearchAdapter);
+        System.out.println(model);
 
 
     }

@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/colorPrimaryDark">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:weightSum="1"
-        android:background="@android:color/holo_green_dark"
+        android:background="@color/colorPrimary"
         android:id="@+id/linearLayout">
 
         <TextView
@@ -17,6 +18,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Title"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:id="@+id/item_search_txtTitle"
             android:layout_alignBaseline="@+id/item_search_txtDistance"
             android:layout_alignBottom="@+id/item_search_txtDistance"
@@ -32,6 +34,7 @@
             android:id="@+id/item_search_txtAddress"
             android:layout_below="@+id/item_search_txtDistance"
             android:layout_toLeftOf="@+id/item_search_txtDistance"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:layout_toStartOf="@+id/item_search_txtDistance"
             android:layout_weight="0.52" />
 
@@ -42,6 +45,7 @@
             android:text="Distance"
             android:id="@+id/item_search_txtDistance"
             android:layout_alignRight="@+id/item_search_txtTitle"
+            android:textColor="@color/common_google_signin_btn_text_dark"
             android:layout_alignEnd="@+id/item_search_txtTitle"
             android:layout_below="@+id/locationImage" />
 
