@@ -4,6 +4,15 @@ import android.app.Application;
 
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.FlybitsOptions;
+import com.flybits.core.api.context.FlybitsContext;
+import com.flybits.core.api.context.contracts.ContextContract;
+import com.flybits.core.api.context.plugins.AvailablePlugins;
+import com.flybits.core.api.exceptions.FeatureNotSupportedException;
+import com.flybits.core.api.interfaces.IRequestCallback;
+import com.flybits.core.api.models.User;
+import com.flybits.core.api.utils.filters.LoginOptions;
+
+import java.util.ArrayList;
 
 //flybits api
 
@@ -13,16 +22,66 @@ import com.flybits.core.api.FlybitsOptions;
  */
 public class MainApplication extends Application {
 
+    private ArrayList<FlybitsContext> activateContext() {
+
+        ArrayList<FlybitsContext> listOfContext = new ArrayList<FlybitsContext>();
+
+
+        FlybitsContext obj10 = new FlybitsContext(AvailablePlugins.BATTERY, 60000, ContextContract.Priority.LOW, null);
+        listOfContext.add(obj10);
+
+        //Flybits.include(this).activateContextPlugin(BATTERY);
+        return listOfContext;
+    }
+
     @Override
-    public void onCreate() {
+    public void onCreate(){
 
         super.onCreate();
+
         FlybitsOptions builder = new FlybitsOptions.Builder(this)
-                //Additional Options Can Be Added Here
+                .setDebug(true)
+                .enableContextUploading(1, ContextContract.Priority.HIGH)//1 -> Time in minutes between uploads
                 .build();
 
         //Initialize the FlybitsOptions
         Flybits.include(this).initialize(builder);
+
+        LoginOptions options = new LoginOptions.Builder(this)
+                .loginAnonymously()
+                .setDeviceOSVersion() //Optional
+                .setRememberMeToken() //Optional
+                .build();
+
+        Flybits.include(this).login(options, new IRequestCallback<User>() {
+            @Override
+            public void onSuccess(User data) {
+                //Login Successful
+
+                try {
+                    Flybits.include(MainApplication.this).activateContext(null, activateContext());
+                    System.out.println("Login success");
+                } catch (FeatureNotSupportedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailed(String reason) {
+                //Unsuccessful Login Make UI Action
+            }
+
+            @Override
+            public void onException(Exception exception) {
+                //Unsuccessful Login Make UI Action
+            }
+
+            @Override
+            public void onCompleted() {
+                //Clean up method
+            }
+        });
         //ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(49, -79.383184, 200, GooglePlaces.MAXIMUM_RESULTS));
         //RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
         //get.execute(array);
