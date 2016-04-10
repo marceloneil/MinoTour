@@ -8,22 +8,34 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.design.widget.NavigationView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.flybits.core.api.Flybits;
+import com.flybits.core.api.exceptions.FlybitsDisabledException;
+import com.flybits.core.api.interfaces.IRequestCallback;
+import com.flybits.core.api.interfaces.IRequestGeneralCallback;
+import com.flybits.core.api.interfaces.IRequestPaginationCallback;
+import com.flybits.core.api.models.Pagination;
+import com.flybits.core.api.models.Zone;
+import com.flybits.core.api.models.ZoneMoment;
+import com.flybits.core.api.models.v1_5.internal.Result;
+import com.flybits.core.api.utils.http.GetRequest;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.TestModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -52,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-
-
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(){
@@ -62,8 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 refreshItems();
             }
         });
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -126,9 +133,118 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
         get.execute(array);
+
+        getZone();
     }
 
+    public void getZone(){
+        Log.i("MainActivity", "Getting Zone");
+        String zoneId = "F9E7A523-AB28-4C75-9CD3-878EFF5B9C75";
+        Flybits.include(MainActivity.this).getZone(zoneId, new IRequestCallback<Zone>() {
+            @Override
+            public void onSuccess(Zone zone) {
+                Log.i("MainActivity", "Successfully found zone: " + zone.getName());
 
+                getMoments(zone);
+            }
+
+            @Override
+            public void onException(Exception e) {
+                Log.e("MainActivity", "Failed to get Zone: " + e.toString());
+            }
+
+            @Override
+            public void onFailed(String s) {
+                Log.e("MainActivity", "Failed to get Zone: " + s);
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+    }
+
+    public void getMoments(Zone zone){
+        Log.i("MainActivity", "Getting Moments");
+        Flybits.include(MainActivity.this).getZoneMomentsForZone(zone.id, new IRequestPaginationCallback<ArrayList<ZoneMoment>>() {
+            @Override
+            public void onSuccess(ArrayList<ZoneMoment> zoneMoments, Pagination pagination) {
+                Log.i("MainActivity", "Successfully received Moments");
+                if(zoneMoments != null && zoneMoments.size() > 0) {
+                    getMomentData(zoneMoments.get(0));
+                }
+            }
+
+            @Override
+            public void onException(Exception e) {
+                Log.e("MainActivity", "Failed to get Moment: " + e.toString());
+            }
+
+            @Override
+            public void onFailed(String s) {
+                Log.e("MainActivity", "Failed to get Moment: " + s);
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+    }
+
+    public void authenticateMoment(final ZoneMoment moment){
+        Log.i("MainActivity", "Authenticating Moment");
+        Flybits.include(MainActivity.this).authenticateZoneMomentUsingJWT(moment, new IRequestGeneralCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i("MainActivity", "Successfuly authenticated Moment");
+                getMomentData(moment);
+            }
+
+            @Override
+            public void onException(Exception e) {
+                Log.e("MainActivity", "Failed to authenitcate moment: " + e.toString());
+            }
+
+            @Override
+            public void onFailed(String s) {
+                Log.e("MainActivity", "Failed to authenitcate moment: " + s);
+
+            }
+
+            @Override
+            public void onCompleted() {
+
+            }
+        });
+    }
+
+    public void getMomentData(ZoneMoment moment){
+        Log.i("MainActivity", "Getting Moment Data");
+        String url = moment.launchURL + "/KeyValuePairs/AsMetadata";
+
+        Result result = null;
+        try {
+            result = new GetRequest(MainActivity.this, url, null).getResponse();
+            if(result.status >= 200 && result.status < 300) {
+
+                String resultAsString = result.response;
+                Log.i("MainActivity", "payload: " + resultAsString);
+
+                //The list Of available web pages are now stored in the Locales object.
+            } else {
+                // Something went wrong with your Request.
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FlybitsDisabledException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     public void onBackPressed() {
