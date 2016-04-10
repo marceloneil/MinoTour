@@ -3,9 +3,14 @@ package com.minotour.minotour;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -23,6 +28,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
     protected ArrayList doInBackground(ArrayList... arrayLists) {
             try {
                 OkHttpClient client = new OkHttpClient();
+                Gson gson = new Gson();
 
                 Map<String, Object> nearParams = new LinkedHashMap<>();
                 nearParams.put("key", BuildConfig.GoogleApiKey);
@@ -46,7 +52,20 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
                 Response nearResponse = client.newCall(nearRequest).execute();
 
                 Log.i("link", "https://maps.googleapis.com/maps/api/place/nearbysearch/" + nearData);
-                Log.i("Response", nearResponse.body().string());
+                //Log.i("Response", nearResponse.body().string());
+                try {
+                    String jsonData = nearResponse.body().string();
+                    JSONObject Jobject = new JSONObject(jsonData);
+                    JSONArray Jarray = Jobject.getJSONArray("results");
+                    Log.i("JSONObject", Jobject.toString());
+                    Log.i("JSONArray", Jarray.toString());
+                    for (int i = 0; i < Jarray.length(); i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+                        Log.i("OtherObject", object.toString());
+                    }
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
 
                 /*Map<String, Object> distParams = new LinkedHashMap<>();
                 distParams.put("key", BuildConfig.GoogleApiKey);
@@ -77,6 +96,14 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
         return null;
+    }
+    static class Gist {
+        Map<String, GistFile> files;
+    }
+
+    static class GistFile {
+        String content;
     }
 }
