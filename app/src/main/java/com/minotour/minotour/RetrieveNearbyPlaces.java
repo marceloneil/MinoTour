@@ -4,13 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.minotour.minotour.models.Place;
+import com.minotour.minotour.models.Result;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -51,26 +49,21 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
                         .build();
                 Response nearResponse = client.newCall(nearRequest).execute();
 
-                Log.i("link", "https://maps.googleapis.com/maps/api/place/nearbysearch/" + nearData);
-                //Log.i("Response", nearResponse.body().string());
-                try {
-                    String jsonData = nearResponse.body().string();
-                    JSONObject Jobject = new JSONObject(jsonData);
-                    JSONArray Jarray = Jobject.getJSONArray("results");
-                    Log.i("JSONObject", Jobject.toString());
-                    Log.i("JSONArray", Jarray.toString());
-                    for (int i = 0; i < Jarray.length(); i++) {
-                        JSONObject object = Jarray.getJSONObject(i);
-                        Log.i("OtherObject", object.toString());
-                    }
-                } catch(JSONException e){
-                    e.printStackTrace();
+                String jsonData = nearResponse.body().string();
+                Place place = gson.fromJson(jsonData, Place.class);
+
+                StringBuilder loc = new StringBuilder();
+                for (Result result : place.results){
+                    if(loc.length() != 0) loc.append('|');
+                    loc.append(result.geometry.location.lat);
+                    loc.append(",");
+                    loc.append(result.geometry.location.lng);
                 }
 
-                /*Map<String, Object> distParams = new LinkedHashMap<>();
+                Map<String, Object> distParams = new LinkedHashMap<>();
                 distParams.put("key", BuildConfig.GoogleApiKey);
                 distParams.put("origins", (arrayLists[0].get(0)).toString() + "," + (arrayLists[0].get(1)).toString());
-                distParams.put("destinations", p.getLatitude() + "," + p.getLongitude());
+                distParams.put("destinations", loc.toString());
 
                 StringBuilder distData = new StringBuilder();
                 for (Map.Entry<String, Object> param : distParams.entrySet()) {
@@ -84,7 +77,9 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
                 Request distRequest = new Request.Builder()
                         .url("https://maps.googleapis.com/maps/api/distancematrix/" + distData)
                         .build();
-                Response distResponse = client.newCall(distRequest).execute();*/
+                Response distResponse = client.newCall(distRequest).execute();
+
+                Log.i("response", distResponse.body().string());
 
                 //Request request = new Request.Builder()
                 //        .url("https://maps.googleapis.com/maps/api/distancematrix/" + postData)
