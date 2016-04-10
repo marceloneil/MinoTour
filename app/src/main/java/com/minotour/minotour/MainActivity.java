@@ -8,20 +8,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.design.widget.NavigationView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
+import com.minotour.minotour.models.Result;
 import com.minotour.minotour.models.TestModel;
 
 import java.util.ArrayList;
@@ -124,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
         ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
-        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
+        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }
 
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Load complete
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
         ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
-        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
+        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
         onItemsLoadComplete();
     }
@@ -222,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
         ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
-        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
+        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }
 
@@ -293,5 +296,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.removeUpdates(this);
         }
+    }
+
+    public void OnRetreivedNearbyPlaces(ArrayList<Result> results){
+        // TODO: dosomethings
+        Gson gson = new Gson();
+        String resultString = gson.toJson(results.get(0));
+        Log.i("FirstResult", resultString);
     }
 }

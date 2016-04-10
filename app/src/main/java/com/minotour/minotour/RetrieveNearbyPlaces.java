@@ -4,8 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.minotour.minotour.models.DistanceMatrix;
+import com.minotour.minotour.models.Element;
 import com.minotour.minotour.models.Place;
 import com.minotour.minotour.models.Result;
+import com.minotour.minotour.models.Row;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -14,16 +17,23 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Marcel O'Neil on 09/04/16.
  * Using the google api
  */
-public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
+public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<Result>> {
+
+    private MainActivity mActivity;
+
+    public RetrieveNearbyPlaces(MainActivity activity){
+        mActivity = activity;
+    }
 
     protected ArrayList doInBackground(ArrayList... arrayLists) {
+        Place place;
+
             try {
                 OkHttpClient client = new OkHttpClient();
                 Gson gson = new Gson();
@@ -50,7 +60,9 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
                 Response nearResponse = client.newCall(nearRequest).execute();
 
                 String jsonData = nearResponse.body().string();
-                Place place = gson.fromJson(jsonData, Place.class);
+                place = gson.fromJson(jsonData, Place.class);
+
+                Log.i("link","https://maps.googleapis.com/maps/api/place/nearbysearch/" + nearData);
 
                 StringBuilder loc = new StringBuilder();
                 for (Result result : place.results){
@@ -79,26 +91,39 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, List> {
                         .build();
                 Response distResponse = client.newCall(distRequest).execute();
 
-                Log.i("response", distResponse.body().string());
+                Log.i("link", "https://maps.googleapis.com/maps/api/distancematrix/" + distData);
 
-                //Request request = new Request.Builder()
-                //        .url("https://maps.googleapis.com/maps/api/distancematrix/" + postData)
-               //         .build();
-               // Response response = HTTPclient.newCall(request).execute();
+                DistanceMatrix matrix = gson.fromJson(distResponse.body().string(), DistanceMatrix.class);
 
-                //Log.i("Output:", response.body().string());
+                for(int i=0;i < place.results.size();i++){
+                    Result result = place.results.get(i);
+                    if(matrix != null && matrix.rows != null && matrix.rows.size() > 0){
+                        Row row = matrix.rows.get(0);
+
+                        if(row.elements != null && row.elements.size() > i){
+                            Element element = row.elements.get(i);
+                            result.distance = element.distance;
+                        }
+
+                        if(matrix.destination_addresses.size() > i){
+                            result.destination_addresses = matrix.destination_addresses.get(i);
+                        }
+                    }
+                }
+
+                //String resultString = gson.toJson(place.results.get(0));
+                //Log.i("FirstResult", resultString);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-        return null;
-    }
-    static class Gist {
-        Map<String, GistFile> files;
+        return place.results;
     }
 
-    static class GistFile {
-        String content;
+    @Override
+    protected void onPostExecute(ArrayList<Result> results) {
+        super.onPostExecute(results);
+
+        mActivity.OnRetreivedNearbyPlaces(results);
     }
 }
