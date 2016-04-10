@@ -3,7 +3,6 @@ package com.minotour.minotour;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,7 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
 
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double lng;
     private RecyclerView mLstSearch;
     private SearchAdapter mSearchAdapter;
-    private ArrayList<TestModel> mData = new ArrayList<TestModel>();
+    private ArrayList<PlaceResult> mData = new ArrayList<PlaceResult>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public void onCreate(Bundle savedInstanceState) throws SecurityException, IllegalArgumentException{
@@ -83,12 +81,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mLstSearch.setHasFixedSize(true);
 
+        /*mData.add(new TestModel());
         mData.add(new TestModel());
         mData.add(new TestModel());
         mData.add(new TestModel());
         mData.add(new TestModel());
-        mData.add(new TestModel());
-        mData.add(new TestModel());
+        mData.add(new TestModel());*/
 
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -298,37 +296,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }*/
 
-    @Override
-    public void zoneClick(TestModel model) {
+    //@Override
+    public void zoneClick(PlaceResult model) {
 
 
         Intent myIntent = new Intent(MainActivity.this, expand_card.class);
         myIntent.putExtra("query_name", model.name);
-        myIntent.putExtra("query_address", model.address);
-        myIntent.putExtra("query_desc", model.desc);
-        myIntent.putExtra("query_distance", model.distance);
+        myIntent.putExtra("query_address", model.vicinity);
+        myIntent.putExtra("query_desc", model.rating);
+        myIntent.putExtra("query_distance", model.distance.text);
+        myIntent.putExtra("query_image", model.photoUrl.replaceAll("\\\\u0026","&").replaceAll("\\\\u003d","="));
         MainActivity.this.startActivity(myIntent);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //this will update the search queries
-        mData.clear();
-        mData.add(new TestModel());
-        mSearchAdapter = new SearchAdapter(mData, this);
-        mLstSearch.setAdapter(mSearchAdapter);
-        System.out.println(model);
 
 
     }
@@ -443,6 +422,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          *      result.photoUrl.replaceAll("\\\\u0026","&").replaceAll("\\\\u003d","=") = link to photo
          * }
          */
+        mData.clear();
+        for(PlaceResult result: results){
+            mData.add(result);
+        }
+        //this will update the search queries
+
+
+        //mData.add(new TestModel());
+        mSearchAdapter = new SearchAdapter(mData, this);
+        mLstSearch.setAdapter(mSearchAdapter);
     }
 
     class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, KeyValuePayload>{

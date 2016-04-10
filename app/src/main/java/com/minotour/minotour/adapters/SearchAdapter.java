@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.minotour.minotour.R;
-import com.minotour.minotour.models.TestModel;
+import com.minotour.minotour.models.PlaceResult;
 
 import java.util.ArrayList;
 
@@ -16,10 +16,10 @@ import java.util.ArrayList;
  * Pushes search queries into list
  */
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
-    private ArrayList<TestModel> mDataset;
+    private ArrayList<PlaceResult> mDataset;
 
     public interface IZoneClick{
-        void zoneClick(TestModel model);
+        void zoneClick(PlaceResult model);
     }
 
     // Provide a reference to the views for each data item
@@ -43,7 +43,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     IZoneClick callback;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SearchAdapter(ArrayList<TestModel> data, IZoneClick callback) {
+    public SearchAdapter(ArrayList<PlaceResult> data, IZoneClick callback) {
         mDataset = data;
         this.callback = callback;
     }
@@ -63,7 +63,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final TestModel item = mDataset.get(position);
+        final PlaceResult item = mDataset.get(position);
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,8 +71,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
         holder.txtTitle.setText(item.name);
-        holder.txtDist.setText(" - "+item.distance + "km");
-        holder.txtAddr.setText(item.address);
+        holder.txtDist.setText(item.distance.text);
+        holder.txtAddr.setText(item.vicinity);
+        //holder.i
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)

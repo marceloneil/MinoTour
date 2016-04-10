@@ -17,6 +17,8 @@ public class expand_card extends Activity{
         String title = (String) getIntent().getSerializableExtra("query_name");
         String distance = (String) getIntent().getSerializableExtra("query_distance");
         String desc = (String) getIntent().getSerializableExtra("query_desc");
+        String image = (String) getIntent().getSerializableExtra("query_image");
+
 
         setContentView(R.layout.expand_card);
 
