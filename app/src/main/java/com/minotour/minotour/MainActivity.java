@@ -7,6 +7,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -22,8 +23,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.exceptions.FlybitsDisabledException;
 import com.flybits.core.api.interfaces.IRequestCallback;
@@ -34,6 +33,7 @@ import com.flybits.core.api.models.Zone;
 import com.flybits.core.api.models.ZoneMoment;
 import com.flybits.core.api.models.v1_5.internal.Result;
 import com.flybits.core.api.utils.http.GetRequest;
+import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.TestModel;
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onSuccess(ArrayList<ZoneMoment> zoneMoments, Pagination pagination) {
                 Log.i("MainActivity", "Successfully received Moments");
                 if(zoneMoments != null && zoneMoments.size() > 0) {
-                    getMomentData(zoneMoments.get(0));
+                    authenticateMoment(zoneMoments.get(0));
                 }
             }
 
@@ -226,26 +226,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getMomentData(ZoneMoment moment){
         Log.i("MainActivity", "Getting Moment Data");
-        String url = moment.launchURL + "/KeyValuePairs/AsMetadata";
 
-        Result result = null;
-        try {
-            result = new GetRequest(MainActivity.this, url, null).getResponse();
-            if(result.status >= 200 && result.status < 300) {
-
-                String resultAsString = result.response;
-                Log.i("MainActivity", "payload: " + resultAsString);
-
-                //The list Of available web pages are now stored in the Locales object.
-            } else {
-                // Something went wrong with your Request.
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FlybitsDisabledException e) {
-            e.printStackTrace();
-        }
+        new GetMomentDataTask().execute(moment);
 
     }
 
@@ -419,5 +401,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Gson gson = new Gson();
         String resultString = gson.toJson(results.get(0));
         Log.i("FirstResult", resultString);
+    }
+
+    class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, String>{
+
+        @Override
+        protected String doInBackground(ZoneMoment... params) {
+            ZoneMoment moment = params[0];
+            String url = moment.launchURL + "KeyValuePairs/AsMetadata";
+
+            Log.i("MainActivity", "Http Get: " + url);
+
+            Result result = null;
+            String resultAsString = null;
+
+
+//            try {
+//                OkHttpClient client = new OkHttpClient();
+//                Request request = new Request.Builder()
+//                        .url(url)
+//                        .build();
+//
+//                Response response = null;
+//                response = client.newCall(request).execute();
+//                resultAsString = response.body().string();
+//
+//                Log.i("MainActivity", "payload: " + resultAsString);
+//
+//            } catch (Exception e) {
+//                Log.e("MainActivity", e.toString());
+//                e.printStackTrace();
+//            }
+
+
+            try {
+                result = new GetRequest(MainActivity.this, url, null).getResponse();
+                Log.i("MainActivity", "Status Code: " + result.status);
+
+                if(result.status >= 200 && result.status < 300) {
+                    Log.i("MainActivity", "Http good status code: " + result.status);
+                    Log.i("MainActivity", "payload: ");
+
+                    //The list Of available web pages are now stored in the Locales object.
+                } else {
+                    // Something went wrong with your Request.
+                    Log.i("MainActivity", "Http bad status code: " + result.status);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (FlybitsDisabledException e) {
+                e.printStackTrace();
+            }
+
+            return resultAsString;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.i("MainActivity", "Downloaded Moment Data: " + s);
+        }
     }
 }
