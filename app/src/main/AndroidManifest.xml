@@ -43,5 +43,8 @@
         <receiver android:name="com.flybits.core.api.receivers.context.ContextCollectionAlarmManager"/>
         <service android:name="com.flybits.core.api.context.services.ContextUploadingService"/>
 
+        <receiver android:name="com.flybits.core.api.receivers.context.BatteryLifeCollectionAlarmManager"/>
+        <service android:name="com.flybits.core.api.context.services.context.BatteryLifeCollectionService"/>
+
     </application>
 </manifest>
