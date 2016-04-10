@@ -33,7 +33,6 @@ import com.flybits.core.api.models.Zone;
 import com.flybits.core.api.models.ZoneMoment;
 import com.flybits.core.api.models.v1_5.internal.Result;
 import com.flybits.core.api.utils.http.GetRequest;
-import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.TestModel;
@@ -409,11 +408,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          *      result.name = name
          *      result.types = ArrayList<String> with google api types
          *      result.vicinity = Actual address, use instead of destination_addresses
+         *      result.rating = Float from 0-5, or null if no rating
+         *      result.price_level =
+         *          null — No price recorded
+         *          0 — Free
+         *          1 — Inexpensive
+         *          2 — Moderate
+         *          3 — Expensive
+         *          4 — Very Expensive
+         *      result.photoUrl.replaceAll("\\\\u0026","&").replaceAll("\\\\u003d","=") = link to photo
          * }
          */
-        //Gson gson = new Gson();
-        //String resultString = gson.toJson(results.get(0));
-        //Log.i("FirstResult", resultString);
     }
 
     class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, String>{

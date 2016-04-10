@@ -5,4 +5,5 @@ package com.minotour.minotour.models;
  */
 public class Photos {
     public String photo_reference;
+    public Integer width;
 }

@@ -15,4 +15,5 @@ public class PlaceResult {
     public ArrayList<String> types;
     public Distance distance;
     public String destination_addresses;
+    public String photoUrl;
 }
