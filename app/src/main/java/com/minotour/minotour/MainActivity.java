@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.flybits.core.api.Flybits;
-import com.flybits.core.api.exceptions.FlybitsDisabledException;
 import com.flybits.core.api.interfaces.IRequestCallback;
 import com.flybits.core.api.interfaces.IRequestGeneralCallback;
 import com.flybits.core.api.interfaces.IRequestPaginationCallback;
@@ -35,10 +34,10 @@ import com.flybits.core.api.models.v1_5.internal.Result;
 import com.flybits.core.api.utils.http.GetRequest;
 import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
+import com.minotour.minotour.models.KeyValuePayload;
 import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.TestModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -416,10 +415,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Log.i("FirstResult", resultString);
     }
 
-    class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, String>{
+    class GetMomentDataTask extends AsyncTask<ZoneMoment, Void, KeyValuePayload>{
 
         @Override
-        protected String doInBackground(ZoneMoment... params) {
+        protected KeyValuePayload doInBackground(ZoneMoment... params) {
             ZoneMoment moment = params[0];
             String url = moment.launchURL + "KeyValuePairs/AsMetadata";
 
@@ -428,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Result result = null;
             String resultAsString = null;
 
-
+//
 //            try {
 //                OkHttpClient client = new OkHttpClient();
 //                Request request = new Request.Builder()
@@ -437,15 +436,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //                Response response = null;
 //                response = client.newCall(request).execute();
-//                resultAsString = response.body().string();
+//                Log.i("MainActivity", "status: " + response.code());
+////                resultAsString = response.body().string();
 //
-//                Log.i("MainActivity", "payload: " + resultAsString);
+//                Log.i("MainActivity", "payload: " + response.body().string());
 //
 //            } catch (Exception e) {
 //                Log.e("MainActivity", e.toString());
 //                e.printStackTrace();
 //            }
 
+            KeyValuePayload kvp = null;
 
             try {
                 result = new GetRequest(MainActivity.this, url, null).getResponse();
@@ -453,7 +454,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if(result.status >= 200 && result.status < 300) {
                     Log.i("MainActivity", "Http good status code: " + result.status);
-                    Log.i("MainActivity", "payload: ");
+
+                    Gson gson = new Gson();
+                    kvp = gson.fromJson(result.response, KeyValuePayload.class);
+
 
                     //The list Of available web pages are now stored in the Locales object.
                 } else {
@@ -461,20 +465,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.i("MainActivity", "Http bad status code: " + result.status);
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (FlybitsDisabledException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Log.e("MainActivity", e.toString());
             }
 
-            return resultAsString;
+            return kvp;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(KeyValuePayload kvp) {
+            super.onPostExecute(kvp);
 
-            Log.i("MainActivity", "Downloaded Moment Data: " + s);
+            Gson gson = new Gson();
+            String str = gson.toJson(kvp);
+            Log.i("MainActivity", "Downloaded Moment Data: " + str);
         }
     }
 }
