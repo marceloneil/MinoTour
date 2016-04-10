@@ -5,11 +5,6 @@ import android.app.Application;
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.FlybitsOptions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import se.walkercrou.places.GooglePlaces;
-
 //flybits api
 
 /**
@@ -28,9 +23,9 @@ public class MainApplication extends Application {
 
         //Initialize the FlybitsOptions
         Flybits.include(this).initialize(builder);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(43.653226, -79.383184, 200, GooglePlaces.MAXIMUM_RESULTS));
-        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
-        get.execute(array);
+        //ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(49, -79.383184, 200, GooglePlaces.MAXIMUM_RESULTS));
+        //RetrieveNearbyPlaces get = new RetrieveNearbyPlaces();
+        //get.execute(array);
 
         /*try {
             URL url = new URL("https://maps.googleapis.com/maps/api/place/nearbysearch/");
