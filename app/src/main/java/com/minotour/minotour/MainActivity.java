@@ -320,9 +320,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent myIntent = new Intent(MainActivity.this, expand_card.class);
         myIntent.putExtra("query_name", model.name);
         myIntent.putExtra("query_address", model.vicinity);
-        myIntent.putExtra("query_desc", model.rating);
+        myIntent.putExtra("query_rating", Double.toString(model.rating));
         myIntent.putExtra("query_distance", model.distance.text);
-        myIntent.putExtra("query_image", model.photoUrl.replaceAll("\\\\u0026","&").replaceAll("\\\\u003d","="));
+
+        Integer price_int = model.price_level;
+        String price_string;
+        if(price_int == null) {
+
+            price_string = "Not Available";
+        }else if(price_int == 0) {
+            price_string = "Free";
+        } else if(price_int == 1){
+            price_string = "Inexpensive";
+        } else if (price_int == 2){
+            price_string = "Moderate";
+        } else if (price_int == 3){
+            price_string = "Expensive";
+        } else{
+            price_string = "Very Expensive";
+        }
+
+
+
+        myIntent.putExtra("query_price", price_string);
+        if(model.photoUrl != null) {
+            myIntent.putExtra("query_image", model.photoUrl.replaceAll("\\\\u0026", "&").replaceAll("\\\\u003d", "="));
+        }
         MainActivity.this.startActivity(myIntent);
 
 

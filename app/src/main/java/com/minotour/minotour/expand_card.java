@@ -19,6 +19,16 @@ public class expand_card extends Activity{
         String address = (String) getIntent().getSerializableExtra("query_address");
         String title = (String) getIntent().getSerializableExtra("query_name");
         String distance = (String) getIntent().getSerializableExtra("query_distance");
+        String rating = (String) getIntent().getSerializableExtra("query_rating");
+
+        if(rating == null) {
+            rating = "No Rating";
+        }else{
+            rating = rating + " Stars";
+        }
+
+        String price = (String) getIntent().getSerializableExtra("query_price");
+
         String image = (String) getIntent().getSerializableExtra("query_image");
 
 
@@ -30,6 +40,10 @@ public class expand_card extends Activity{
         addressId.setText(address);
         TextView distanceId = (TextView) findViewById(R.id.item_search_txtDistance);
         distanceId.setText(distance);
+        TextView ratingId = (TextView) findViewById(R.id.rating);
+        distanceId.setText("rating: " + rating);
+        TextView priceId = (TextView) findViewById(R.id.price);
+        distanceId.setText(price);
 
         ImageView locationImage;
         locationImage = (ImageView) findViewById(R.id.expand_image_location);
