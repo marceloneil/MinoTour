@@ -2,6 +2,7 @@ package com.minotour.minotour;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -22,7 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.content.Intent;
 
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.interfaces.IRequestCallback;
@@ -37,7 +37,6 @@ import com.google.gson.Gson;
 import com.minotour.minotour.adapters.SearchAdapter;
 import com.minotour.minotour.models.KeyValuePayload;
 import com.minotour.minotour.models.PlaceResult;
-import com.minotour.minotour.models.TestModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,12 +58,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SearchAdapter mSearchAdapter;
     private ArrayList<PlaceResult> mData = new ArrayList<PlaceResult>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ArrayList<KeyValuePayload> zMoments;
 
     public void onCreate(Bundle savedInstanceState) throws SecurityException, IllegalArgumentException{
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        zMoments = new ArrayList<>();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, "Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
 
@@ -176,8 +178,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onSuccess(ArrayList<ZoneMoment> zoneMoments, Pagination pagination) {
                 Log.i("MainActivity", "Successfully received Moments");
-                if(zoneMoments != null && zoneMoments.size() > 0) {
-                    authenticateMoment(zoneMoments.get(0));
+                /*if(zoneMoments != null && zoneMoments.size() > 0) {
+                    for(ZoneMoment zz: zoneMoments) {
+                        authenticateMoment(zz);
+                    }
+                }*/
+                Log.i("MainActivity", "zonemoments size: " + zoneMoments.size());
+//                authenticateMoment(zoneMoments.get(0));
+//                authenticateMoment(zoneMoments.get(1));
+
+                for(ZoneMoment zm : zoneMoments){
+                    authenticateMoment(zm);
                 }
             }
 
@@ -249,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Load complete
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, "Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
         onItemsLoadComplete();
@@ -324,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng, 1000, 1, "Food"));
+        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat,lng,1000,"Tourism"));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
     }
@@ -444,27 +455,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.i("MainActivity", "Http Get: " + url);
 
             Result result = null;
-            String resultAsString = null;
-
-//
-//            try {
-//                OkHttpClient client = new OkHttpClient();
-//                Request request = new Request.Builder()
-//                        .url(url)
-//                        .build();
-//
-//                Response response = null;
-//                response = client.newCall(request).execute();
-//                Log.i("MainActivity", "status: " + response.code());
-////                resultAsString = response.body().string();
-//
-//                Log.i("MainActivity", "payload: " + response.body().string());
-//
-//            } catch (Exception e) {
-//                Log.e("MainActivity", e.toString());
-//                e.printStackTrace();
-//            }
-
             KeyValuePayload kvp = null;
 
             try {
@@ -473,7 +463,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if(result.status >= 200 && result.status < 300) {
                     Log.i("MainActivity", "Http good status code: " + result.status);
-
+                    //Log.i("MainActivity", "RESULT: " + result.response);
                     Gson gson = new Gson();
                     kvp = gson.fromJson(result.response, KeyValuePayload.class);
 
@@ -498,6 +488,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Gson gson = new Gson();
             String str = gson.toJson(kvp);
             Log.i("MainActivity", "Downloaded Moment Data: " + str);
+
+            zMoments.add(kvp);
+
+            for(KeyValuePayload k: zMoments){
+                if(k.localizedKeyValuePairs.en.root.tired != null) {
+                    Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.tired);
+                }
+                if(k.localizedKeyValuePairs.en.root.test != null) {
+                    Log.i("MainActivity", "MOMENT: " + k.localizedKeyValuePairs.en.root.test);
+                }
+
+
+            }
         }
     }
 }
