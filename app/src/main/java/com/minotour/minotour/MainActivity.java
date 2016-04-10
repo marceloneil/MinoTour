@@ -22,8 +22,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import com.flybits.core.api.Flybits;
 import com.flybits.core.api.exceptions.FlybitsDisabledException;
 import com.flybits.core.api.interfaces.IRequestCallback;
@@ -415,9 +413,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void OnRetreivedNearbyPlaces(ArrayList<PlaceResult> results){
-        // TODO: dosomethings
-        Gson gson = new Gson();
-        String resultString = gson.toJson(results.get(0));
-        Log.i("FirstResult", resultString);
+        /**
+         * results = ArrayList of nearby places, sorted by 'relevence'
+         * results.get(i) with 0 <= i < results.size() give each element individually, loop through instead!!!:
+         * for(PlaceResult result : results){
+         *      result.geometry.location.lat = latitude
+         *      result.geometry.location.lng = longitude
+         *      result.distance.text = distance in km
+         *      result.distance.value = distance value in m (I think)
+         *      result.destination_addresses = address <-- maybe wrong, based off of lat/lng instead of place api, use vicinity
+         *      result.name = name
+         *      result.types = ArrayList<String> with google api types
+         *      result.vicinity = Actual address, use instead of destination_addresses
+         * }
+         */
+        //Gson gson = new Gson();
+        //String resultString = gson.toJson(results.get(0));
+        //Log.i("FirstResult", resultString);
     }
 }
