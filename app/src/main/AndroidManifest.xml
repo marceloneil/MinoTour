@@ -29,5 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name="com.flybits.core.api.receivers.BootReceiverForContext"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.flybits.core.api.receivers.rules.RulesAlarmManager"/>
+        <service android:name="com.flybits.core.api.context.services.RulesRetrievalService"/>
+        <receiver android:name="com.flybits.core.api.receivers.context.ContextCollectionAlarmManager"/>
+        <service android:name="com.flybits.core.api.context.services.ContextUploadingService"/>
+
     </application>
 </manifest>
