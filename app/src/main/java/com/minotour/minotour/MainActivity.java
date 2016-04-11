@@ -26,7 +26,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.minotour.minotour.adapters.SearchAdapter;
-import com.minotour.minotour.models.KeyValuePayload;
 import com.minotour.minotour.models.PlaceResult;
 import com.minotour.minotour.models.Weather;
 
@@ -74,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // UI
         setContentView(R.layout.activity_main);
-        zMoments = new ArrayList<>();
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -370,9 +368,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         refreshItems();
 
-        /*if(zMoments.get(0).localizedKeyValuePairs.en.root.language.equals("english")){
-            type = "English"
-        }*/
         Log.i("Weather", w);
     }
 }
