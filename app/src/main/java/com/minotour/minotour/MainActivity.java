@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Google API info
     private double lat;
     private double lng;
-    private String type;
-    private String keyword;
+
+    // Weather API info
+    private boolean goodWeather;
 
     // UI info
     private RecyclerView mLstSearch;
@@ -101,6 +103,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getNearby(){
+        String keyword = null;
+        String type;
+        if(goodWeather){
+            type = "park";
+        } else {
+            type = "cafe";
+        }
         ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat, lng, keyword, type));
         RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
         get.execute(array);
@@ -123,23 +132,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 refreshItems();
             }
         });
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mLstSearch = (RecyclerView) findViewById(R.id.content_main_lstSearch);
-        mLstSearch.setHasFixedSize(true);
+        if(mLstSearch != null) {
+            mLstSearch.setHasFixedSize(true);
+        } else {
+            Log.i("mLstSearch", "mLstSearch is null");
+        }
+
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLstSearch.setLayoutManager(mLayoutManager);
         mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        setSupportActionBar(toolbar);
+
+        if(toolbar != null) {
+            toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+            setSupportActionBar(toolbar);
+        } else {
+            Log.i("toolbar", "toolbar is null");
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        if(drawer != null) {
+            drawer.addDrawerListener(toggle);
+        } else {
+            Log.i("drawer", "drawer is null");
+        }
         toggle.syncState();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if(navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+        } else {
+            Log.i("navigationView", "navigationView is null");
+        }
+
         //updates the thing
         mSearchAdapter.notifyDataSetChanged();
 
@@ -151,9 +181,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if(drawer != null) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         } else {
+            Log.i("drawer", "drawer is null");
             super.onBackPressed();
         }
     }
@@ -193,13 +228,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if(drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            Log.i("drawer", "drawer is null");
+        }
         return true;
     }
-
-    /*public void appendQuery(String title, String distance, String address) {
-
-    }*/
 
     //@Override
     public void zoneClick(PlaceResult model) {
@@ -351,21 +386,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //this will update the search queries
 
 
-        //mData.add(new TestModel());
         mSearchAdapter = new SearchAdapter(mData, this, this);
         mLstSearch.setAdapter(mSearchAdapter);
     }
 
     public void OnRetrievedWeather(ArrayList<Weather> results) {
-        String w = results.get(0).main.toString();
-        if (w.equals("Rain") || w.equals("Snow") || w.equals("Extreme") || w.equals("Clouds")) {
-            //type = "Museum";
-            //refreshItems();
-        } else {
-            //type = "Park";
-        }
-        refreshItems();
-
-        Log.i("Weather", w);
+        String w = results.get(0).main;
+        goodWeather = !(w.equals("Rain") || w.equals("Snow") || w.equals("Extreme") || w.equals("Clouds"));
+        Log.i("weather", "" + goodWeather);
     }
 }

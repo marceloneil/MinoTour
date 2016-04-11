@@ -31,7 +31,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
         mActivity = activity;
     }
 
-    protected ArrayList doInBackground(ArrayList... arrayLists) {
+    protected ArrayList<PlaceResult> doInBackground(ArrayList... arrayLists) {
         Place place;
 
         try {
@@ -60,13 +60,14 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                 nearData.append('=');
                 nearData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             }
-            //nearData.insert(0, "json?");
 
             Request nearRequest = new Request.Builder()
                     .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData)
                     .build();
             Response nearResponse = client.newCall(nearRequest).execute();
+
             Log.i("LinkNearby", "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData);
+
             String jsonData = nearResponse.body().string();
             place = gson.fromJson(jsonData, Place.class);
 
@@ -111,7 +112,6 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                 distData.append('=');
                 distData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             }
-            //distData.insert(0, "json?");
 
             Request distRequest = new Request.Builder()
                     .url("https://maps.googleapis.com/maps/api/distancematrix/json?" + distData)
@@ -137,10 +137,6 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                     }
                 }
             }
-
-            //String resultString = gson.toJson(place.results.get(0));
-            //Log.i("FirstPlaceResult", resultString);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
