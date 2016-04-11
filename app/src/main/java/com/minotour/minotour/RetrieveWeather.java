@@ -24,40 +24,40 @@ public class RetrieveWeather extends AsyncTask<ArrayList, Void, ArrayList<Weathe
 
     private MainActivity mActivity;
 
-    public RetrieveWeather(MainActivity activity){
+    public RetrieveWeather(MainActivity activity) {
         mActivity = activity;
     }
 
     protected ArrayList doInBackground(ArrayList... arrayLists) {
-            try {
-                OkHttpClient client = new OkHttpClient();
-                Gson gson = new Gson();
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Gson gson = new Gson();
 
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("APPID", "aa8f02cf5084844920b2640fd9f6871e");
-                params.put("lat", arrayLists[0].get(0).toString());
-                params.put("lon", arrayLists[0].get(1).toString());
-                params.put("units", arrayLists[0].get(2).toString());
+            Map<String, Object> params = new LinkedHashMap<>();
+            params.put("APPID", "aa8f02cf5084844920b2640fd9f6871e");
+            params.put("lat", arrayLists[0].get(0).toString());
+            params.put("lon", arrayLists[0].get(1).toString());
+            params.put("units", arrayLists[0].get(2).toString());
 
-                StringBuilder data = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (data.length() != 0) data.append('&');
-                    data.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    data.append('=');
-                    data.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-
-                Request request = new Request.Builder()
-                        .url("http://api.openweathermap.org/data/2.5/weather?" + data)
-                        .build();
-
-                Response response = client.newCall(request).execute();
-
-                String jsonData = response.body().string();
-                weatherResult = gson.fromJson(jsonData, WeatherResult.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            StringBuilder data = new StringBuilder();
+            for (Map.Entry<String, Object> param : params.entrySet()) {
+                if (data.length() != 0) data.append('&');
+                data.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                data.append('=');
+                data.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
             }
+
+            Request request = new Request.Builder()
+                    .url("http://api.openweathermap.org/data/2.5/weather?" + data)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            String jsonData = response.body().string();
+            weatherResult = gson.fromJson(jsonData, WeatherResult.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return weatherResult.weather;
     }
 

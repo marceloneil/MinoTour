@@ -8,6 +8,7 @@
 
     <!-- Needed for Flybits SDK -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Needed for Google API -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -22,7 +23,6 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         xmlns:tools="http://schemas.android.com/tools"
         tools:replace="android:icon,android:theme">
-        <meta-data android:name="com.flybits.apikey" android:value="@string/flybitskey" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -30,23 +30,5 @@
             </intent-filter>
         </activity>
         <activity android:name="expand_card"/>
-
-
-        <receiver
-            android:name="com.flybits.core.api.receivers.BootReceiverForContext"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="com.flybits.core.api.receivers.rules.RulesAlarmManager"/>
-        <service android:name="com.flybits.core.api.context.services.RulesRetrievalService"/>
-        <receiver android:name="com.flybits.core.api.receivers.context.ContextCollectionAlarmManager"/>
-        <service android:name="com.flybits.core.api.context.services.ContextUploadingService"/>
-
-        <receiver android:name="com.flybits.core.api.receivers.context.BatteryLifeCollectionAlarmManager"/>
-        <service android:name="com.flybits.core.api.context.services.context.BatteryLifeCollectionService"/>
-
     </application>
 </manifest>
