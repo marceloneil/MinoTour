@@ -41,9 +41,16 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                 Map<String, Object> nearParams = new LinkedHashMap<>();
                 nearParams.put("key", BuildConfig.GoogleApiKey);
                 nearParams.put("location", arrayLists[0].get(0).toString() + "," + arrayLists[0].get(1).toString());
-                nearParams.put("radius", arrayLists[0].get(2).toString());
-                nearParams.put("keyword", arrayLists[0].get(3).toString());
-                //nearParams.put("rankby", "distance");
+                if(arrayLists[0].get(2) != null) {
+                    nearParams.put("keyword", arrayLists[0].get(2).toString());
+                }
+                if(arrayLists[0].get(3) != null) {
+                    nearParams.put("type", arrayLists[0].get(3).toString());
+                }
+                if(arrayLists[0].get(2) == null && arrayLists[0].get(3) == null){
+                    nearParams.put("type", "point_of_interest");
+                }
+                nearParams.put("rankby", "distance");
                 nearParams.put("opennow", "true");
 
                 StringBuilder nearData = new StringBuilder();
@@ -59,7 +66,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                         .url("https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData)
                         .build();
                 Response nearResponse = client.newCall(nearRequest).execute();
-                Log.i("Link","https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData);
+                Log.i("LinkNearby","https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + nearData);
                 String jsonData = nearResponse.body().string();
                 place = gson.fromJson(jsonData, Place.class);
 
@@ -79,9 +86,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                                 photoData.append("=");
                                 photoData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                             }
-                            Log.i("linkData", photoData.toString());
                             result.photoUrl = "https://maps.googleapis.com/maps/api/place/photo?" + photoData.toString();
-                            Log.i("photoLink", result.photoUrl);
                         }
                     }
                 }
@@ -113,7 +118,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                         .build();
                 Response distResponse = client.newCall(distRequest).execute();
 
-                Log.i("link", "https://maps.googleapis.com/maps/api/distancematrix/json?" + distData);
+                Log.i("linkDistance", "https://maps.googleapis.com/maps/api/distancematrix/json?" + distData);
 
                 DistanceMatrix matrix = gson.fromJson(distResponse.body().string(), DistanceMatrix.class);
 
