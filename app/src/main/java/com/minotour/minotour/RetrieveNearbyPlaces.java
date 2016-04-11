@@ -48,7 +48,7 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                 nearParams.put("type", arrayLists[0].get(3).toString());
             }
             if (arrayLists[0].get(2) == null && arrayLists[0].get(3) == null) {
-                nearParams.put("type", "point_of_interest");
+                nearParams.put("type", "cafe");
             }
             nearParams.put("rankby", "distance");
             nearParams.put("opennow", "true");

@@ -36,20 +36,17 @@ import java.util.Arrays;
  * Created by Marcel O'Neil on 09/04/16.
  * Main Activity
  */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        SearchAdapter.IZoneClick,
-        LocationListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SearchAdapter.IZoneClick, LocationListener{
 
     protected MainApplication app;
 
     // Location Info
-    private LocationManager locationManager;
     private String provider;
 
     // Google API info
     private double lat;
     private double lng;
-    private String type = "restaurant";
+    private String type;
     private String keyword;
 
     // UI info
@@ -167,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // ...
 
         // Load complete
-        System.out.println("Latitude: " + lat + "     Longitude: " + lng);
         getNearby();
     }
 
