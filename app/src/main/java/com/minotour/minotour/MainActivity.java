@@ -71,39 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
 
-        // UI
-        setContentView(R.layout.activity_main);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
-            }
-        });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mLstSearch = (RecyclerView) findViewById(R.id.content_main_lstSearch);
-        mLstSearch.setHasFixedSize(true);
-        // use a linear layout manager
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mLstSearch.setLayoutManager(mLayoutManager);
-        mSearchAdapter = new SearchAdapter(mData, this, this);
-        mLstSearch.setAdapter(mSearchAdapter);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        //updates the thing
-        mSearchAdapter.notifyDataSetChanged();
-
-        // Get the application instance
-        app = (MainApplication) getApplication();
-
+        getUI();
         getLocation(false);
         getNearby();
         getWeather();
@@ -146,6 +114,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayList<Object> arrayW = new ArrayList<Object>(Arrays.asList(lat, lng, "Toronto,ON"));
         RetrieveWeather getW = new RetrieveWeather(MainActivity.this);
         getW.execute(arrayW);
+    }
+
+    public void getUI(){
+        setContentView(R.layout.activity_main);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mLstSearch = (RecyclerView) findViewById(R.id.content_main_lstSearch);
+        mLstSearch.setHasFixedSize(true);
+        // use a linear layout manager
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLstSearch.setLayoutManager(mLayoutManager);
+        mSearchAdapter = new SearchAdapter(mData, this, this);
+        mLstSearch.setAdapter(mSearchAdapter);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        //updates the thing
+        mSearchAdapter.notifyDataSetChanged();
+
+        // Get the application instance
+        app = (MainApplication) getApplication();
     }
 
 
