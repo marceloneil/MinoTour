@@ -87,8 +87,25 @@ public class RetrieveNearbyPlaces extends AsyncTask<ArrayList, Void, ArrayList<P
                             photoData.append("=");
                             photoData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
                         }
-                        result.photoUrl = "https://maps.googleapis.com/maps/api/place/photo?" + photoData.toString();
+                        result.photoUrl = "https://maps.googleapis.com/maps/api/place/photo?" + photoData;
                     }
+                } else {
+                    Map<String, Object> streetParams = new LinkedHashMap<>();
+                    streetParams.put("key", BuildConfig.GoogleApiKey);
+                    streetParams.put("size", "640x640");
+                    streetParams.put("location", result.vicinity);
+
+                    StringBuilder streetData = new StringBuilder();
+                    for (Map.Entry<String, Object> param : streetParams.entrySet()) {
+                        if (streetData.length() != 0) streetData.append('&');
+                        streetData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                        streetData.append('=');
+                        streetData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                    }
+
+                    result.photoUrl = "https://maps.googleapis.com/maps/api/streetview?" + streetData;
+
+                    Log.i("photoUrl", result.photoUrl);
                 }
             }
 
