@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Location Info
     private String provider;
+    private boolean locationAvailable;
 
     // Google API info
     private double lat;
@@ -90,20 +92,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // default
             Criteria criteria = new Criteria();
             provider = locationManager.getBestProvider(criteria, true);
+            //provider = "network";
             Location location = locationManager.getLastKnownLocation(provider);
 
             // Initialize the location fields
             if (location != null) {
                 Log.i("Location", "Provider " + provider + " has been selected.");
+                locationAvailable = true;
                 onLocationChanged(location);
             } else {
-                Log.i("Location", "Location not available");
+                if(provider.equals("gps")) {
+                    provider = "network";
+                } else {
+                    provider = "gps";
+                }
+                location = locationManager.getLastKnownLocation(provider);
+                if(location != null){
+                    Log.i("Location", "Provider " + provider + " has been selected.");
+                    locationAvailable = true;
+                    onLocationChanged(location);
+                } else {
+                    locationAvailable = false;
+                    Log.i("Location", "Location not available");
+                }
             }
         }
     }
 
     public void getNearby(){
-        if(isNetworkAvailable()) {
+        if(isNetworkAvailable() && locationAvailable) {
             String keyword = null;
             String type;
             if (goodWeather) {
@@ -119,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getWeather(){
-        if(isNetworkAvailable()) {
+        if(isNetworkAvailable() && locationAvailable) {
             ArrayList<Object> arrayW = new ArrayList<Object>(Arrays.asList(lat, lng, "Toronto,ON"));
             RetrieveWeather getW = new RetrieveWeather(MainActivity.this);
             getW.execute(arrayW);
@@ -335,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) throws SecurityException {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) throws SecurityException {
         if (requestCode == 1) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation(true);
