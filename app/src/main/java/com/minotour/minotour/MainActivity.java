@@ -103,23 +103,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getNearby(){
-        String keyword = null;
-        String type;
-        if(goodWeather){
-            type = "park";
-        } else {
-            type = "cafe";
+        if(isNetworkAvailable()) {
+            String keyword = null;
+            String type;
+            if (goodWeather) {
+                type = "park";
+            } else {
+                type = "cafe";
+            }
+            ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat, lng, keyword, type));
+            RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
+            get.execute(array);
+            onItemsLoadComplete();
         }
-        ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat, lng, keyword, type));
-        RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
-        get.execute(array);
-        onItemsLoadComplete();
     }
 
     public void getWeather(){
-        ArrayList<Object> arrayW = new ArrayList<Object>(Arrays.asList(lat, lng, "Toronto,ON"));
-        RetrieveWeather getW = new RetrieveWeather(MainActivity.this);
-        getW.execute(arrayW);
+        if(isNetworkAvailable()) {
+            ArrayList<Object> arrayW = new ArrayList<Object>(Arrays.asList(lat, lng, "Toronto,ON"));
+            RetrieveWeather getW = new RetrieveWeather(MainActivity.this);
+            getW.execute(arrayW);
+        }
     }
 
     public void getUI(){
