@@ -40,8 +40,6 @@ import java.util.Arrays;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SearchAdapter.IZoneClick, LocationListener{
 
-    protected MainApplication app;
-
     // Location Info
     private String provider;
     private boolean locationAvailable;
@@ -193,9 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //updates the thing
         mSearchAdapter.notifyDataSetChanged();
-
-        // Get the application instance
-        app = (MainApplication) getApplication();
     }
 
 
