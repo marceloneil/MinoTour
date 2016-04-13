@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         getUI();
         getLocation(false);
-        getNearby();
-        getWeather();
     }
 
     public void getLocation(Boolean Done){
@@ -118,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getNearby(){
+        Log.i("one","called");
         if(isNetworkAvailable() && locationAvailable) {
             String keyword = null;
             String type;
@@ -215,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // ...
 
         // Load complete
+        Log.i("one","reloaded");
         getNearby();
     }
 
@@ -305,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
+        Log.i("one","resumed");
         getNearby();
     }
 
