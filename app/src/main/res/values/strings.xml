@@ -5,18 +5,4 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-
-    <string name="flybitskey">1A15FBDB-B4C6-49FE-B59A-7A2F00F63DF8</string>
-
-        <string name="hello_world">Hello world!</string>
-        <string name="menu_settings">Settings</string>
-        <string name="title_activity_main">MainActivity</string>
-        <string-array name="list">
-            <item>Item 1</item>
-            <item>Item 2</item>
-            <item>Item 3</item>
-            <item>Item 4</item>
-            <item>Item 5</item>
-        </string-array>
-
 </resources>
