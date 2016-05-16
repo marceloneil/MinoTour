@@ -16,6 +16,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".Global"
         android:icon="@mipmap/bull"
         android:label="MinoTour"
         android:supportsRtl="true"

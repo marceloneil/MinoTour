@@ -235,12 +235,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_recommended) {
+        if (id == R.id.nav_cafe) {
 
+        } else if (id == R.id.nav_restaurant) {
 
-        } else if (id == R.id.nav_restaurants) {
-
-        } else if (id == R.id.nav_transportation) {
+        } else if (id == R.id.nav_transit) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -375,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void OnRetrievedNearbyPlaces(ArrayList<PlaceResult> results) {
         /**
-         * results = ArrayList of nearby places, sorted by 'relevence'
+         * results = ArrayList of nearby places, sorted by 'relevance'
          * results.get(i) with 0 <= i < results.size() give each element individually, loop through instead!!!:
          * for(PlaceResult result : results){
          *      result.geometry.location.lat = latitude

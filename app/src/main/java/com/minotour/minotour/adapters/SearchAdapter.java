@@ -46,7 +46,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     IZoneClick callback;
-public Context context;
+    public Context context;
     // Provide a suitable constructor (depends on the kind of dataset)
     public SearchAdapter(ArrayList<PlaceResult> data, IZoneClick callback, Context contextInner) {
         mDataset = data;

@@ -3,18 +3,38 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_recommended"
-            android:title="Recommended"
-            android:icon="@drawable/ic_landscape_black_24dp"
+            android:id="@+id/nav_cafe"
+            android:title="Cafes"
+            android:icon="@drawable/ic_local_cafe_black_24dp"
             android:checked="true"/>
         <item
-            android:id="@+id/nav_restaurants"
-            android:icon="@drawable/ic_restaurant_black_24dp"
+            android:id="@+id/nav_restaurant"
+            android:icon="@drawable/ic_local_dining_black_24dp"
             android:title="Restaurants" />
         <item
-            android:id="@+id/nav_transportation"
-            android:icon="@drawable/ic_directions_bus_black_24dp"
-            android:title="Transportation" />
+            android:id="@+id/nav_transit"
+            android:icon="@drawable/ic_directions_transit_black_24dp"
+            android:title="Transit" />
+        <item
+            android:id="@+id/nav_park"
+            android:icon="@drawable/ic_terrain_black_24dp"
+            android:title="Parks" />
+        <item
+            android:id="@+id/nav_museum"
+            android:icon="@drawable/ic_museum_black"
+            android:title="Museums" />
+        <item
+            android:id="@+id/nav_store"
+            android:icon="@drawable/ic_store_mall_directory_black_24dp"
+            android:title="Stores" />
+        <item
+            android:id="@+id/nav_bar"
+            android:icon="@drawable/ic_local_bar_black_24dp"
+            android:title="Bars" />
+        <item
+            android:id="@+id/nav_mall"
+            android:icon="@drawable/ic_local_mall_black_24dp"
+            android:title="Malls" />
     </group>
 
 </menu>
