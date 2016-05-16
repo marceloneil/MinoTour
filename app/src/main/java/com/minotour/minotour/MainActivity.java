@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Google API info
     private double lat;
     private double lng;
+    private String type = "cafe";
 
     // Weather API info
     private boolean goodWeather;
@@ -119,12 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("one","called");
         if(isNetworkAvailable() && locationAvailable) {
             String keyword = null;
-            String type;
-            if (goodWeather) {
-                type = "park";
-            } else {
-                type = "cafe";
-            }
             ArrayList<Object> array = new ArrayList<Object>(Arrays.asList(lat, lng, keyword, type));
             RetrieveNearbyPlaces get = new RetrieveNearbyPlaces(MainActivity.this);
             get.execute(array);
@@ -236,11 +231,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_cafe) {
-
+            type = "cafe";
         } else if (id == R.id.nav_restaurant) {
-
+            type = "restaurant";
         } else if (id == R.id.nav_transit) {
-
+            type = "transit_station";
+        } else if (id == R.id.nav_park) {
+            type = "park";
+        } else if (id == R.id.nav_museum){
+            type = "museum";
+        } else if (id == R.id.nav_store){
+            type = "store";
+        } else if (id == R.id.nav_bar){
+            type = "bar";
+        } else if (id == R.id.nav_mall){
+            type = "shopping_mall";
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer != null) {
@@ -248,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Log.i("drawer", "drawer is null");
         }
+        refreshItems();
         return true;
     }
 
