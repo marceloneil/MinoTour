@@ -12,10 +12,6 @@
             android:icon="@drawable/ic_local_dining_black_24dp"
             android:title="Restaurants" />
         <item
-            android:id="@+id/nav_transit"
-            android:icon="@drawable/ic_directions_transit_black_24dp"
-            android:title="Transit" />
-        <item
             android:id="@+id/nav_park"
             android:icon="@drawable/ic_terrain_black_24dp"
             android:title="Parks" />

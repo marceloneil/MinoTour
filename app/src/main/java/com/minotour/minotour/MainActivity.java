@@ -234,8 +234,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             type = "cafe";
         } else if (id == R.id.nav_restaurant) {
             type = "restaurant";
-        } else if (id == R.id.nav_transit) {
-            type = "transit_station";
         } else if (id == R.id.nav_park) {
             type = "park";
         } else if (id == R.id.nav_museum){
