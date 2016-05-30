@@ -308,9 +308,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             locationManager.requestLocationUpdates(provider, 400, 1, this);
         }
         System.out.println("Latitude: " + lat + "     Longitude: " + lng);
-        Log.i("one","resumed");
-        getNearby();
-        getWeather();
+        //Log.i("one","resumed");
+        if(mData.size() == 0){
+            getNearby();
+            getWeather();
+        }
     }
 
     /* Remove the locationlistener updates when Activity is paused */
