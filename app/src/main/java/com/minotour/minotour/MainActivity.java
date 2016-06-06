@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -206,11 +207,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //refresh
     void refreshItems() {
         // Load items
-        // ...
-
-        // Load complete
         Log.i("one","reloaded");
         getNearby();
+        // Load complete
     }
 
 
@@ -245,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_mall){
             type = "shopping_mall";
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer != null) {
             drawer.closeDrawer(GravityCompat.START);
@@ -258,9 +258,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //@Override
     public void zoneClick(PlaceResult model) {
 
-
-        Intent myIntent = new Intent(MainActivity.this, expand_card.class);
-        myIntent.putExtra("query_name", model.name);
+        Uri location = Uri.parse("https://maps.google.com/maps?daddr="+Uri.encode(model.vicinity)+"("+Uri.encode(model.name)+")");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+        //Intent myIntent = new Intent(MainActivity.this, expand_card.class);
+        /*myIntent.putExtra("query_name", model.name);
         myIntent.putExtra("query_address", model.vicinity);
         if (model.rating != null) {
             myIntent.putExtra("query_rating", model.rating.toString());
@@ -290,8 +295,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         myIntent.putExtra("query_price", price_string);
         if (model.photoUrl != null) {
             myIntent.putExtra("query_image", model.photoUrl.replaceAll("\\\\u0026", "&").replaceAll("\\\\u003d", "="));
-        }
-        MainActivity.this.startActivity(myIntent);
+        }*/
+        //MainActivity.this.startActivity(myIntent);
 
 
     }
@@ -333,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lat = (location.getLatitude());
         lng = (location.getLongitude());
     }
+
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

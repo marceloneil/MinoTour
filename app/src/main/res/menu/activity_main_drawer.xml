@@ -32,5 +32,4 @@
             android:icon="@drawable/ic_local_mall_black_24dp"
             android:title="Malls" />
     </group>
-
 </menu>
